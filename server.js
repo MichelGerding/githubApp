@@ -1,7 +1,7 @@
 // http is a standard module that comes with Node.js
 const http = require('http')
 
-http.createServer(handleRequest).listen(3000)
+http.createServer(handleRequest).listen(process.env.PORT)
 
 function handleRequest (request, response) {
 
