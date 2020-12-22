@@ -45,14 +45,14 @@ webHookHandler.on('pull_request', (event) => {
       
         let new_content_buffer = Buffer.from(csv_string, 'utf-8')
         
-        let branch = event.payload.pull_request.base.label.split()
+        let branch = event.payload.pull_request.base.label.split(":")[1]
         
         let body = JSON.stringify({
             sha: json.sha,
             content: new_content_buffer.toString('base64'),
             message: `added feature "${usefull.title}" to the features table`,
             comitter: 'Feature bot',
-            branch: 
+            branch: branch
           })
         
         console.log(path)
