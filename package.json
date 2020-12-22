@@ -10,6 +10,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "github-webhook-handler": "^1.0.0"
   },
   "engines": {
     "node": "12.x"
