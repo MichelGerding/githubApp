@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "github-webhook-handler": "^1.0.0",
-    "@octokit/core": "^3.2.4"
+    "@octokit/core": "^3.2.4",
+    "csv-string": "^4.0.1"
   },
   "engines": {
     "node": "12.x"

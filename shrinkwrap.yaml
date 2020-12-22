@@ -1,5 +1,6 @@
 dependencies:
   '@octokit/core': 3.2.4
+  csv-string: 4.0.1
   github-webhook-handler: 1.0.0
 packages:
   /@octokit/auth-token/2.4.4:
@@ -94,6 +95,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
+  /csv-string/4.0.1:
+    dev: false
+    engines:
+      node: '>=12.0'
+    resolution:
+      integrity: sha512-nCdK+EWDbqLvZ2MmVQhHTmidMEsHbK3ncgTJb4oguNRpkmH5OOr+KkDRB4nqsVrJ7oK0AdO1QEsBp0+z7KBtGQ==
   /deprecation/2.3.1:
     dev: false
     resolution:
@@ -167,4 +174,5 @@ shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
   '@octokit/core': ^3.2.4
+  csv-string: ^4.0.1
   github-webhook-handler: ^1.0.0

@@ -1,7 +1,6 @@
-import * as CSV from 'csv-string'
-
 // values for the enviroment variables set in the .env file can be accesed at proces.env.VARIABLE_NAME
 const secret = process.env.WEBHOOK_SECRET
+const CSV = require('csv-string')
 
 const fetch = require('node-fetch');
 const http = require('http')
@@ -35,12 +34,16 @@ webHookHandler.on('pull_request', (event) => {
       .then(json => {
       
         let buffer = Buffer.from(json.content, json.encoding)
-        let text = buffer.toString('utf8')
+        let text = buffer.toString('utf-8')
         
-        console.log(old_file)
       
-        let csv_arr = 
+        let csv_arr = CSV.parse(text)
+        csv_arr.push([usefull.title, usefull.url, usefull.user])
+        let csv_string = CSV.stringify(csv_arr) 
       
+        let new_content_buffer = Buffer.from(csv_string, 'utf-8')
+        
+        
         fetch(path, {
           method: 'PUT',
           withCredentials: true,
@@ -50,12 +53,15 @@ webHookHandler.on('pull_request', (event) => {
           },
           
     
-          body: JSON.stringigy({
+          body: JSON.stringify({
             sha: json.sha,
-            content: text
-            
+            content: new_content_buffer.toString('base64'),
+            message: `added feature "${usefull.title}" to the features table`,
+            comitter: 'Feature bot' 
           })
         })
+        .then(res => res.json())
+        .then(json => console.log(json))
       
     });
         
