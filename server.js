@@ -1,3 +1,5 @@
+import * as CSV from 'csv-string'
+
 // values for the enviroment variables set in the .env file can be accesed at proces.env.VARIABLE_NAME
 const secret = process.env.WEBHOOK_SECRET
 
@@ -35,11 +37,9 @@ webHookHandler.on('pull_request', (event) => {
         let buffer = Buffer.from(json.content, json.encoding)
         let text = buffer.toString('utf8')
         
-        const old_file = {
-          sha: json.sha,
-          content: text
-        }
         console.log(old_file)
+      
+        let csv_arr = 
       
         fetch(path, {
           method: 'PUT',
@@ -47,7 +47,14 @@ webHookHandler.on('pull_request', (event) => {
           headers: {
             'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
             'Content-Type': 'application/json'
-          }
+          },
+          
+    
+          body: JSON.stringigy({
+            sha: json.sha,
+            content: text
+            
+          })
         })
       
     });
