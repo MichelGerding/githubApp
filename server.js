@@ -21,7 +21,7 @@ webHookHandler.on('pull_request', (event) => {
     console.log(event.payload.pull_request.base)
     
     let pull = event.payload
-    let usefull = {
+    let pull_info = {
       "url": pull.pull_request.html_url,
       "user": pull.pull_request.user.login,
       "title": pull.pull_request.title,
@@ -31,7 +31,7 @@ webHookHandler.on('pull_request', (event) => {
     
     const file_path = process.env.EDIT_FILE_PATH
     // when we get the data we need we take it and get the current content of the file
-    let path = `https://api.github.com/repos/${usefull.owner}/${usefull.repo}/contents/${file_path}`
+    let path = `https://api.github.com/repos/${pull_info.owner}/${pull_info.repo}/contents/${file_path}`
   
     fetch(path)
       .then(res => res.json())
@@ -42,7 +42,7 @@ webHookHandler.on('pull_request', (event) => {
         
       
         let csv_arr = CSV.parse(text)
-        csv_arr.push([usefull.title, usefull.url, usefull.user])
+        csv_arr.push([pull_info.title, pull_info.url, pull_info.user])
         let csv_string = CSV.stringify(csv_arr) 
       
         let new_content_buffer = Buffer.from(csv_string, 'utf-8')
@@ -52,7 +52,7 @@ webHookHandler.on('pull_request', (event) => {
         let body = JSON.stringify({
             sha: json.sha,
             content: new_content_buffer.toString('base64'),
-            message: `added feature "${usefull.title}" to the features table`,
+            message: `added feature "${pull_info.title}" to the features table`,
             comitter: 'Feature bot',
             branch: branch
           })
@@ -81,8 +81,5 @@ function handleRequest (request, response) {
   // ignore all requests that aren’t POST requests
   if (request.method !== 'POST') return response.end('ok')
 
-  // here we pass the current request & response to the webHookHandler we created
-  // on top. If the request is valid, then the "issue" above handler is called
   webHookHandler(request, response, () => response.end('ok'))
-  // console.log(request)
 }
