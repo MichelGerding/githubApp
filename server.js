@@ -32,7 +32,23 @@ webHookHandler.on('pull_request', (event) => {
       .then(res => res.json())
       .then(json => {
       
-        let buffer = new Buffer(json)
+        let buffer = Buffer.from(json.content, json.encoding)
+        let text = buffer.toString('utf8')
+        
+        const old_file = {
+          sha: json.sha,
+          content: text
+        }
+        console.log(old_file)
+      
+        fetch(path, {
+          method: 'PUT',
+          withCredentials: true,
+          headers: {
+            'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+            'Content-Type': 'application/json'
+          }
+        })
       
     });
         
