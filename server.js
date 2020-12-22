@@ -16,6 +16,8 @@ webHookHandler.on('pull_request', (event) => {
   if (event.payload.pull_request.merged) {
     console.log("A pull request has been merged")
     
+    console.log(event.payload.pull_request.base)
+    
     let pull = event.payload
     let usefull = {
       "url": pull.pull_request.html_url,
@@ -43,11 +45,14 @@ webHookHandler.on('pull_request', (event) => {
       
         let new_content_buffer = Buffer.from(csv_string, 'utf-8')
         
+        let branch = event.payload.pull_request.base.label.split()
+        
         let body = JSON.stringify({
             sha: json.sha,
             content: new_content_buffer.toString('base64'),
             message: `added feature "${usefull.title}" to the features table`,
-            comitter: 'Feature bot' 
+            comitter: 'Feature bot',
+            branch: 
           })
         
         console.log(path)
