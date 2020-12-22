@@ -8,6 +8,8 @@ const webHookHandler = require('github-webhook-handler')({
   path: '/',
   secret: secret
 })
+
+// make a http server using
 http.createServer(handleRequest).listen(process.env.PORT)
 
 webHookHandler.on('pull_request', (event) => {
@@ -27,7 +29,7 @@ webHookHandler.on('pull_request', (event) => {
       "owner": pull.repository.owner.login
     }
     
-    const file_path = "folder/test.txt"
+    const file_path = process.env.EDIT_FILE_PATH
     // when we get the data we need we take it and get the current content of the file
     let path = `https://api.github.com/repos/${usefull.owner}/${usefull.repo}/contents/${file_path}`
   
