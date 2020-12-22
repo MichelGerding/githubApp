@@ -10,7 +10,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "github-webhook-handler": "^1.0.0"
+    "github-webhook-handler": "^1.0.0",
+    "@octokit/core": "^3.2.4"
   },
   "engines": {
     "node": "12.x"
