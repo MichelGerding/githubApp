@@ -8,7 +8,7 @@ const webHookHandler = require('github-webhook-handler')({
 })
 http.createServer(handleRequest).listen(process.env.PORT)
 
-webHookHandler.on('issues', (event) => {
+webHookHandler.on('pull_request', (event) => {
   console.log(event.payload)
   // console.log(`Received issue event for "${event.payload.issue.title}"`)
 })
@@ -20,4 +20,5 @@ function handleRequest (request, response) {
   // here we pass the current request & response to the webHookHandler we created
   // on top. If the request is valid, then the "issue" above handler is called
   webHookHandler(request, response, () => response.end('ok'))
+  // console.log(request)
 }
