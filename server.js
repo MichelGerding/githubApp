@@ -43,7 +43,15 @@ webHookHandler.on('pull_request', (event) => {
       
         let new_content_buffer = Buffer.from(csv_string, 'utf-8')
         
+        let body = JSON.stringify({
+            sha: json.sha,
+            content: new_content_buffer.toString('base64'),
+            message: `added feature "${usefull.title}" to the features table`,
+            comitter: 'Feature bot' 
+          })
         
+        console.log(path)
+      console.log(body)
         fetch(path, {
           method: 'PUT',
           withCredentials: true,
@@ -51,14 +59,7 @@ webHookHandler.on('pull_request', (event) => {
             'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
             'Content-Type': 'application/json'
           },
-          
-    
-          body: JSON.stringify({
-            sha: json.sha,
-            content: new_content_buffer.toString('base64'),
-            message: `added feature "${usefull.title}" to the features table`,
-            comitter: 'Feature bot' 
-          })
+          'body': body
         })
         .then(res => res.json())
         .then(json => console.log(json))
