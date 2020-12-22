@@ -1,5 +1,6 @@
 // values for the enviroment variables set in the .env file can be accesed at proces.env.VARIABLE_NAME
 const secret = process.env.WEBHOOK_SECRET
+const octokit = require
 
 const http = require('http')
 const webHookHandler = require('github-webhook-handler')({
@@ -9,7 +10,28 @@ const webHookHandler = require('github-webhook-handler')({
 http.createServer(handleRequest).listen(process.env.PORT)
 
 webHookHandler.on('pull_request', (event) => {
-  console.log(event.payload)
+  
+  // check if the request is merged or not
+  if (event.payload.pull_request.merged) {
+    console.log("A pull request has been merged")
+    
+    let pull = event.payload.pull_request
+    let usefull = {
+      "url": pull.html_url,
+      "user": pull.user.login,
+      "title": pull.title
+    }
+    
+    // when we get the data we need we take it and edit a features file 
+    octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+      owner: 'octocat',
+      repo: 'hello-world',
+      path: 'path',
+      message: 'message',
+      content: 'content'
+    })
+  }
+  console.log(event.payload.pull_request.merged)
   // console.log(`Received issue event for "${event.payload.issue.title}"`)
 })
 
