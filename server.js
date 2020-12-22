@@ -25,8 +25,19 @@ webHookHandler.on('pull_request', (event) => {
       "owner": pull.repository.owner.login
     }
     
-    // when we get the data we need we take it and edit a features file 
-    
+    const file_path = "folder/test.txt"
+    // when we get the data we need we take it and get the current content of the file
+    let options = {
+      headers: {
+        hostname: "api.github.com",
+        path: `repos/${usefull.owner}/${usefull.repo}/contents/${file_path}`,
+        method: "GET",
+        Authorization: `bearer ${process.env.GITHUB_TOKEN}`
+      }
+    }
+    const old = http.request(options, res => {
+      console.log()
+    })
   }
   console.log(event.payload.pull_request.merged)
   // console.log(`Received issue event for "${event.payload.issue.title}"`)
