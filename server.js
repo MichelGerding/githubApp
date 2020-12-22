@@ -1,8 +1,7 @@
 // values for the enviroment variables set in the .env file can be accesed at proces.env.VARIABLE_NAME
 const secret = process.env.WEBHOOK_SECRET
 
-const Octokit = require('@octokit/core')
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const fetch = require('node-fetch');
 const http = require('http')
 const webHookHandler = require('github-webhook-handler')({
   path: '/',
@@ -16,30 +15,28 @@ webHookHandler.on('pull_request', (event) => {
   if (event.payload.pull_request.merged) {
     console.log("A pull request has been merged")
     
-    let pull = event.payload.pull_request
+    let pull = event.payload
     let usefull = {
-      "url": pull.html_url,
-      "user": pull.user.login,
-      "title": pull.title,
+      "url": pull.pull_request.html_url,
+      "user": pull.pull_request.user.login,
+      "title": pull.pull_request.title,
       "repo": pull.repository.name,
       "owner": pull.repository.owner.login
     }
     
     const file_path = "folder/test.txt"
     // when we get the data we need we take it and get the current content of the file
-    let options = {
-      headers: {
-        hostname: "api.github.com",
-        path: `repos/${usefull.owner}/${usefull.repo}/contents/${file_path}`,
-        method: "GET",
-        Authorization: `bearer ${process.env.GITHUB_TOKEN}`
-      }
-    }
-    const old = http.request(options, res => {
-      console.log()
-    })
-  }
-  console.log(event.payload.pull_request.merged)
+    let path = `https://api.github.com/repos/${usefull.owner}/${usefull.repo}/contents/${file_path}`
+  
+    fetch(path)
+      .then(res => res.json())
+      .then(json => {
+      
+        let buffer = new Buffer(json)
+      
+    });
+        
+    }          
   // console.log(`Received issue event for "${event.payload.issue.title}"`)
 })
 
