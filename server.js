@@ -166,6 +166,7 @@ function load_token(installation) {
 }
 
 function load_tokens() {
+  checkfile();
   return JSON.parse(fs.readFileSync(".data/tokens.json"));
 }
 
@@ -224,3 +225,14 @@ const editedFileData = chunks => {
     let data = JSON.parse(body);
   };
 };
+
+function checkfile() {
+  // create the needed folder
+  if(!fs.existsSync('.data/tokens.json')) {
+    if (!fs.existsSync('.data')) {
+      fs.mkdirSync('.data')
+    }
+    fs.writeFile('.data/tokens.json', '{}')
+  }
+}
+  
