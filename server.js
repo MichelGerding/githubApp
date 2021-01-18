@@ -10,10 +10,6 @@ http.createServer(handleRequest).listen(process.env.PORT);
 function handle_pull_request(event) {
   // check if the request is merged or not
   if (event.pull_request.merged) {
-    
-    if (!["main", "master", "production", "prod"].includes(event.pull_request.base.ref)) {
-      return
-    }
 
     const file_path = process.env.EDIT_FILE_PATH;
     const token = load_token(event.installation.id).token;
@@ -65,17 +61,15 @@ function handleRequest(request, response) {
       handle_github_event(request, response, "market");
     }
   }
-  
-  
-
-  if (url.pathname === "/oath-register") {
+  else if (url.pathname === "/oath-register") {
     const clientId = process.env.OAUTH_CLIENT_ID;
     response.writeHead(301, {
       Location: `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user`
     });
+    
+    response.end();
   }
-
-  if (url.pathname === "/oath-confirm") {
+  else if (url.pathname === "/oath-confirm") {
     const code = url.searchParams.get("code");
 
     const data = JSON.stringify({
@@ -110,16 +104,19 @@ function handleRequest(request, response) {
           installation: install,
           token: body.access_token
         });
-        
-        response.end("Success")
+        response.setHeader("Content-Type", "text/html") 
+        response.end("<h3> Thank you for installing this github app. you may leave this page now </h3>")
         // now we have the token we need to link it with the ropisitory
       });
     });
     req.write(data);
     req.end();
   }
+  else {
+    response.statusCode = 404;
+    response.end();
+  }
 
-  response.end("ok");
 }
 
 function handle_github_event(req, res, location) {
