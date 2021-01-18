@@ -232,7 +232,7 @@ function checkfile() {
     if (!fs.existsSync('.data')) {
       fs.mkdirSync('.data')
     }
-    fs.writeFile('.data/tokens.json', '{}')
+    fs.writeFile('.data/tokens.json', '{}', (err) => {console.error})
   }
 }
   
