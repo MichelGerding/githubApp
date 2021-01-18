@@ -1,2 +1,0 @@
-#store the tokens in a hidden file so people cant see the acces_tokens
-/.data/tokens.json

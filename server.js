@@ -156,7 +156,8 @@ function save_token(data) {
   const inst = data.installation;
   tokens[`${inst}`] = {};
   tokens[`${inst}`].token = data.token;
-
+  
+  console.log(tokens)
   fs.writeFileSync(".data/tokens.json", JSON.stringify(tokens, null, 2));
 }
 // load the token we need to use for the
